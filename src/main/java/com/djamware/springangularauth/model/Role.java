@@ -11,10 +11,18 @@ import javax.persistence.Table;
 public class Role {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private String role;
+
+	public Role() {
+	}
+
+	public Role(Integer id, String role) {
+		this.id = id;
+		this.role = role;
+	}
 
 	public Integer getId() {
 		return id;

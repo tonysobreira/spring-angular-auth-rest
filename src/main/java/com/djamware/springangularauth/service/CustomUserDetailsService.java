@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.djamware.springangularauth.model.Role;
 import com.djamware.springangularauth.model.User;
@@ -36,10 +37,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 		return userRepository.findByEmail(email);
 	}
 
+	@Transactional(readOnly = false)
 	public void saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setEnabled(true);
-		Role userRole = roleRepository.findByRole("ADMIN");
+		// Role userRole = roleRepository.findByRole("ADMIN");
+		Role userRole = roleRepository.getOne(1);
 		user.setRoles(new HashSet<>(Arrays.asList(userRole)));
 		userRepository.save(user);
 	}

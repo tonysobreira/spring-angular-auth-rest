@@ -1,5 +1,6 @@
 package com.djamware.springangularauth.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,7 +19,7 @@ import javax.persistence.Table;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private String email;
@@ -28,7 +29,19 @@ public class User {
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "fkuser"), inverseJoinColumns = @JoinColumn(name = "fkrole"))
-	private Set<Role> roles;
+	private Set<Role> roles = new HashSet<Role>();
+
+	public User() {
+	}
+
+	public User(Integer id, String email, String password, String fullName, boolean enabled, Set<Role> roles) {
+		this.id = id;
+		this.email = email;
+		this.password = password;
+		this.fullName = fullName;
+		this.enabled = enabled;
+		this.roles = roles;
+	}
 
 	public Integer getId() {
 		return id;

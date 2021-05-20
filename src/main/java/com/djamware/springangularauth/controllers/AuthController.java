@@ -48,19 +48,20 @@ public class AuthController extends BaseController {
 	public ResponseEntity login(@RequestBody User user) {
 		try {
 			String username = user.getEmail();
-			
-			//authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, user.getPassword()));
-			
+
+			// authenticationManager.authenticate(new
+			// UsernamePasswordAuthenticationToken(username, user.getPassword()));
+
 			Authentication authRequest = new UsernamePasswordAuthenticationToken(username, user.getPassword());
 			Authentication authentication = authenticationManager.authenticate(authRequest);
 			SecurityContext securityContext = SecurityContextHolder.getContext();
 			securityContext.setAuthentication(authentication);
-			
+
 			String token = jwtTokenProvider.createToken(username, this.users.findByEmail(username).getRoles());
 			Map<Object, Object> model = new HashMap<>();
 			model.put("username", username);
 			model.put("token", token);
-			
+
 			return ok(model);
 		} catch (AuthenticationException e) {
 			throw new BadCredentialsException("Invalid email/password supplied");
@@ -83,7 +84,7 @@ public class AuthController extends BaseController {
 
 		return ok(model);
 	}
-	
+
 	@GetMapping("/user")
 	public User getLoggedUser() {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();

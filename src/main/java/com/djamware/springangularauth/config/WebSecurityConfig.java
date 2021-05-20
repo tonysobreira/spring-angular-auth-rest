@@ -40,10 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/auth/login").permitAll()
 				.antMatchers("/api/auth/register").permitAll()
 				.antMatchers("/api/auth/user").permitAll()
+				.antMatchers("/h2-console/**").permitAll()
 				.antMatchers("/api/product/**").hasAuthority("ADMIN").anyRequest().authenticated().and().csrf()
 				.disable().exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint()).and()
 				.apply(new JwtConfigurer(jwtTokenProvider));
 		http.cors();
+		http.headers().frameOptions().disable();
 	}
 
 	@Override
